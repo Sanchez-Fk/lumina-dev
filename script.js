@@ -1,151 +1,123 @@
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Lumina Dev crea experiencias digitales con intención, claridad y movimiento." />
-    <title>Lumina Dev — Experiencias digitales que brillan</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script defer src="script.js"></script>
-  </head>
-  <body>
-    <div class="scroll-progress" aria-hidden="true"><span></span></div>
-    <div class="grain" aria-hidden="true"></div>
-    <header class="site-header">
-      <a class="brand" href="#inicio" aria-label="Lumina Dev, inicio"><span class="brand-mark">L</span> LUMINA<span>DEV</span></a>
-      <nav id="site-nav" aria-label="Navegación principal">
-        <a href="#servicios">Servicios</a>
-        <a href="#proceso">Proceso</a>
-        <a href="#proyectos">Prototipos</a>
-        <a href="#planes">Planes</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-      <a class="header-cta" href="#contacto">Hablemos <span>↗</span></a>
-      <button class="menu-toggle" type="button" aria-label="Abrir navegación" aria-expanded="false" aria-controls="site-nav"><i></i><i></i></button>
-    </header>
+window.addEventListener('DOMContentLoaded', () => {
+  const hasGsap = window.gsap && window.ScrollTrigger;
+  const motionEnabled = hasGsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const header = document.querySelector('.site-header');
+  const progress = document.querySelector('.scroll-progress span');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const siteNav = document.querySelector('#site-nav');
 
-    <main>
-      <section id="inicio" class="hero section-shell">
-        <div class="hero-orb orb-one" aria-hidden="true"></div><div class="hero-orb orb-two" aria-hidden="true"></div>
-        <div class="hero-copy">
-          <p class="eyebrow hero-reveal">Estudio digital independiente <span></span> 2026</p>
-          <h1 aria-label="Diseñamos lo que tu próxima gran idea merece.">
-            <span class="line"><span class="hero-reveal">Diseñamos lo que</span></span>
-            <span class="line italic"><span class="hero-reveal">tu próxima</span></span>
-            <span class="line"><span class="hero-reveal">gran idea merece.</span></span>
-          </h1>
-          <div class="hero-bottom hero-reveal">
-            <p>Webs que se sienten vivas, explican con claridad y convierten curiosidad en confianza.</p>
-            <a href="#proyectos" class="round-link" aria-label="Ver prototipos"><span>Explorar<br />proyectos</span><b>↓</b></a>
-          </div>
-        </div>
-        <div class="hero-art" aria-label="Composición visual de Lumina Dev">
-          <div class="halo"></div>
-          <p class="art-label top">ESTRATEGIA / DISEÑO / CÓDIGO</p>
-          <div class="hero-card card-main"><span>01</span><strong>ideas<br />en órbita</strong><i></i></div>
-          <div class="hero-card card-side"><span>∞</span><small>formas<br />con propósito</small></div>
-          <p class="art-label bottom">SCROLL PARA DESCUBRIR <b>↓</b></p>
-        </div>
-      </section>
+  const refreshScrollUi = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const percentage = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    progress.style.width = `${percentage}%`;
+    header.classList.toggle('is-scrolled', window.scrollY > 30);
+  };
+  window.addEventListener('scroll', refreshScrollUi, { passive: true });
+  refreshScrollUi();
 
-      <section class="signal-strip" aria-label="Capacidades principales">
-        <div class="signal-track"><span>ESTRATEGIA</span><i>✦</i><span>DISEÑO CON INTENCIÓN</span><i>✦</i><span>DESARROLLO A MEDIDA</span><i>✦</i><span>SEO Y RENDIMIENTO</span><i>✦</i><span>ESTRATEGIA</span><i>✦</i><span>DISEÑO CON INTENCIÓN</span><i>✦</i></div>
-      </section>
+  menuToggle.addEventListener('click', () => {
+    const open = menuToggle.getAttribute('aria-expanded') === 'true';
+    menuToggle.setAttribute('aria-expanded', String(!open));
+    menuToggle.setAttribute('aria-label', open ? 'Abrir navegación' : 'Cerrar navegación');
+    siteNav.classList.toggle('open', !open);
+  });
+  siteNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.setAttribute('aria-label', 'Abrir navegación');
+    siteNav.classList.remove('open');
+  }));
 
-      <section id="servicios" class="services section-shell">
-        <div class="section-intro">
-          <p class="eyebrow">01 — Lo que hacemos</p>
-          <h2>Una presencia digital que <em>se siente inevitable.</em></h2>
-        </div>
-        <div class="service-list">
-          <article class="service-item reveal-item"><span class="number">(01)</span><div class="service-icon">↗</div><div><h3>Landing pages</h3><p>Tu propuesta, reducida a su versión más clara y convincente.</p></div><span class="service-arrow">→</span></article>
-          <article class="service-item reveal-item"><span class="number">(02)</span><div class="service-icon">◎</div><div><h3>Identidad web</h3><p>Sistemas visuales que hacen que una marca se reconozca al instante.</p></div><span class="service-arrow">→</span></article>
-          <article class="service-item reveal-item"><span class="number">(03)</span><div class="service-icon">✳</div><div><h3>Experiencias interactivas</h3><p>Movimiento y detalle que invitan a quedarse un poco más.</p></div><span class="service-arrow">→</span></article>
-        </div>
-      </section>
+  if (motionEnabled) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.set('.hero-reveal', { yPercent: 115, opacity: 0 });
+    gsap.to('.hero-reveal', { yPercent: 0, opacity: 1, duration: .92, stagger: .12, ease: 'power4.out', delay: .18 });
+    gsap.from('.hero-art', { opacity: 0, scale: .86, rotate: -4, duration: 1.35, ease: 'power3.out', delay: .3 });
+    gsap.to('.orb-one', { x: -75, y: 34, duration: 5.4, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.utils.toArray('.reveal-item').forEach((item) => {
+      gsap.from(item, { x: -28, opacity: 0, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: item, start: 'top 80%' } });
+    });
+    gsap.from('.section-intro, .project-heading, .contact-intro', { y: 36, opacity: 0, duration: .8, scrollTrigger: { trigger: '.services', start: 'top 75%' } });
+    gsap.from('.project-card', { y: 70, opacity: 0, duration: .85, stagger: .14, ease: 'power3.out', scrollTrigger: { trigger: '.project-grid', start: 'top 80%' } });
+    gsap.from('.case-copy > *, .window-frame, .case-captions', { y: 50, opacity: 0, stagger: .14, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: '.case-feature', start: 'top 72%' } });
+    gsap.from('.price-card', { y: 54, opacity: 0, stagger: .13, duration: .75, ease: 'power3.out', scrollTrigger: { trigger: '.pricing-grid', start: 'top 80%' } });
+    gsap.from('.voices-head', { y: 42, opacity: 0, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.voices', start: 'top 80%' } });
+    gsap.from('.faq-item', { y: 22, opacity: 0, stagger: .09, duration: .55, ease: 'power2.out', scrollTrigger: { trigger: '.faq-list', start: 'top 85%' } });
 
-      <section id="proceso" class="process">
-        <div class="process-sticky section-shell">
-          <div class="process-copy"><p class="eyebrow">02 — Construimos en capas</p><h2>No es solo una página.<br /><em>Es una impresión.</em></h2><p>Deconstruimos tu idea hasta encontrar aquello que merece ser recordado.</p></div>
-          <div class="exploded-device" aria-label="Proceso de diseño en cuatro capas">
-            <div class="device-layer layer-result"><span>RESULTADO</span><div class="result-dot"></div><b>Listo para<br />conectar.</b></div>
-            <div class="device-layer layer-seo"><span>VISIBILIDAD</span><div class="seo-lines"><i></i><i></i><i></i></div><b>SEO que<br />trabaja.</b></div>
-            <div class="device-layer layer-code"><span>CÓDIGO</span><code>&lt;lumina /&gt;<br /> motion = true;<br /><i>build();</i></code></div>
-            <div class="device-layer layer-design"><span>DISEÑO</span><div class="shape-one"></div><div class="shape-two"></div><b>La idea<br />toma forma.</b></div>
-            <div class="layer-index"><span>01</span><span>02</span><span>03</span><span>04</span></div>
-          </div>
-        </div>
-      </section>
+    const layerTimeline = gsap.timeline({ scrollTrigger: { trigger: '.process', start: 'top top', end: 'bottom bottom', scrub: 1.1, pin: '.process-sticky', anticipatePin: 1 } });
+    layerTimeline.from('.process-copy .eyebrow, .process-copy h2, .process-copy > p:last-child', { y: 40, opacity: 0, stagger: .16, duration: .55 })
+      .to('.layer-design', { x: 112, y: -82, rotate: 13, duration: 1 }, .2)
+      .to('.layer-code', { x: 55, y: -30, rotate: 6, duration: 1 }, .2)
+      .to('.layer-seo', { x: -52, y: 36, rotate: -6, duration: 1 }, .2)
+      .to('.layer-result', { x: -108, y: 88, rotate: -12, duration: 1 }, .2)
+      .to('.layer-index', { opacity: 0, duration: .4 }, .25)
+      .to('.device-layer', { scale: .91, duration: .8 }, 1.2)
+      .to('.device-layer', { scale: 1, duration: .6 }, 2.1);
+  } else {
+    document.querySelectorAll('.hero-reveal').forEach((el) => { el.style.transform = 'none'; el.style.opacity = '1'; });
+  }
 
-      <section class="narrative section-shell">
-        <div class="narrative-sticky">
-          <div class="narrative-title"><p class="eyebrow">03 — De la idea a la pantalla</p><h2>Una historia<br />que avanza<br /><em>con intención.</em></h2><div class="story-progress"><span></span></div></div>
-          <div class="story-steps">
-            <article class="story-step is-active" data-step="01"><span>01</span><div><p class="story-kicker">DESCUBRIR</p><h3>Encontramos el centro de gravedad.</h3><p>Antes de diseñar, aclaramos la oferta, las personas a las que hablas y el siguiente paso que quieres provocar.</p><ul><li>Mapa de objetivos</li><li>Arquitectura de contenido</li><li>Dirección visual</li></ul></div><div class="story-art art-discover"><i></i><b>¿Por qué<br />ahora?</b></div></article>
-            <article class="story-step" data-step="02"><span>02</span><div><p class="story-kicker">DISEÑAR</p><h3>Convertimos claridad en una experiencia.</h3><p>Construimos una jerarquía que se entiende a primera vista y un sistema visual que se reconoce sin explicaciones.</p><ul><li>Wireframes narrativos</li><li>Sistema de interfaz</li><li>Prototipo navegable</li></ul></div><div class="story-art art-design"><i></i><i></i><b>Forma<br />+ ritmo</b></div></article>
-            <article class="story-step" data-step="03"><span>03</span><div><p class="story-kicker">ACTIVAR</p><h3>Hacemos que cada detalle cumpla una función.</h3><p>Programamos con atención al rendimiento, a la accesibilidad y a la forma en que la gente realmente navega.</p><ul><li>Interacciones con sentido</li><li>SEO técnico</li><li>Medición preparada</li></ul></div><div class="story-art art-launch"><i></i><b>Listo<br />para salir.</b></div></article>
-          </div>
-        </div>
-      </section>
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (entry.isIntersecting) entry.target.classList.add('is-visible');
+  }), { threshold: .15 });
+  document.querySelectorAll('.contact-form, .project-card').forEach((el) => observer.observe(el));
 
-      <section id="proyectos" class="projects section-shell">
-        <div class="project-heading"><p class="eyebrow">04 — Tipos de página</p><h2>Una web para cada<br /><em>objetivo.</em></h2><p>Cada formato tiene una función clara. Abre cualquiera para explorar un prototipo funcional.</p></div>
-        <div class="project-grid">
-          <a class="project-card type-card corporate-card" href="prototipos/prototipo.html?tipo=corporativa"><span class="card-icon">⌂</span><div class="type-preview corp-preview"><i></i><i></i><i></i><b></b></div><div class="card-info"><strong>Corporativa <i>→</i></strong><p>Presencia institucional sólida y profesional.</p><span>SEO &nbsp; · &nbsp; Responsive &nbsp; · &nbsp; Equipo</span><em>Ver prototipo</em></div></a>
-          <a class="project-card type-card shop-card" href="prototipos/prototipo.html?tipo=ecommerce"><span class="card-icon">⌑</span><div class="type-preview shop-preview"><i></i><i></i><i></i><i></i><b></b></div><div class="card-info"><strong>E-commerce <i>→</i></strong><p>Tu tienda online lista para vender 24/7.</p><span>Carrito &nbsp; · &nbsp; Pagos &nbsp; · &nbsp; Catálogo</span><em>Ver prototipo</em></div></a>
-          <a class="project-card type-card blog-card" href="prototipos/prototipo.html?tipo=blog"><span class="card-icon">▤</span><div class="type-preview blog-preview"><i></i><i></i><i></i><i></i><b></b></div><div class="card-info"><strong>Blog <i>→</i></strong><p>Comparte contenido y posiciónate como referente.</p><span>Artículos &nbsp; · &nbsp; SEO &nbsp; · &nbsp; Categorías</span><em>Ver prototipo</em></div></a>
-          <a class="project-card type-card portfolio-card" href="prototipos/prototipo.html?tipo=portafolio"><span class="card-icon">▦</span><div class="type-preview portfolio-preview"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="card-info"><strong>Portafolio <i>→</i></strong><p>Muestra tu trabajo con un diseño memorable.</p><span>Galería &nbsp; · &nbsp; Casos &nbsp; · &nbsp; Animado</span><em>Ver prototipo</em></div></a>
-          <a class="project-card type-card landing-card" href="prototipos/prototipo.html?tipo=landing"><span class="card-icon">ϟ</span><div class="type-preview landing-preview"><i></i><i></i><i></i></div><div class="card-info"><strong>Landing page <i>→</i></strong><p>Una sola página, un solo objetivo: convertir.</p><span>Conversión &nbsp; · &nbsp; Rápida &nbsp; · &nbsp; Leads</span><em>Ver prototipo</em></div></a>
-        </div>
-      </section>
+  const navLinks = [...siteNav.querySelectorAll('a')];
+  const navSections = navLinks.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+  const navObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+  }), { rootMargin: '-42% 0px -52% 0px', threshold: 0 });
+  navSections.forEach((section) => navObserver.observe(section));
 
-      <section class="case-feature">
-        <div class="case-copy section-shell"><p class="eyebrow">05 — Una experiencia completa</p><div><h2>Del primer vistazo<br />al <em>sí, quiero saber más.</em></h2><p>Una web no tiene que gritar para funcionar. Ordenamos la información, damos peso a lo esencial y usamos movimiento solo cuando ayuda a entender mejor.</p><a href="#contacto" class="text-link">Construyamos la tuya <span>↗</span></a></div></div>
-        <div class="case-window section-shell"><div class="window-frame"><div class="window-bar"><span></span><span></span><span></span><b>luminadev.studio / proyecto</b></div><div class="window-content"><div class="case-orbit orbit-a"></div><div class="case-orbit orbit-b"></div><p>UNA NUEVA FORMA DE ESTAR CERCA</p><h3>Todo empieza<br />con una <em>buena señal.</em></h3><button type="button" data-demo-toast="Una interacción diseñada para guiar, no interrumpir.">Descubrir ahora <b>↗</b></button><div class="case-badge">Construido para<br />avanzar <span>↓</span></div></div></div><div class="case-captions"><span>01. Mensaje claro</span><span>02. Prueba tangible</span><span>03. Acción sencilla</span></div></div>
-      </section>
+  const storySteps = [...document.querySelectorAll('.story-step')];
+  const storyProgress = document.querySelector('.story-progress span');
+  const storyObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    storySteps.forEach((step) => step.classList.toggle('is-active', step === entry.target));
+    const index = storySteps.indexOf(entry.target) + 1;
+    storyProgress.style.width = `${(index / storySteps.length) * 100}%`;
+  }), { rootMargin: '-30% 0px -45% 0px', threshold: .25 });
+  storySteps.forEach((step) => storyObserver.observe(step));
 
-      <section id="planes" class="pricing section-shell">
-        <div class="pricing-heading"><p class="eyebrow">06 — Formas de trabajar</p><h2>El alcance correcto<br /><em>para este momento.</em></h2><p>Un punto de partida claro. Cada plan se adapta a la historia y necesidad de tu negocio.</p></div>
-        <div class="pricing-grid">
-          <article class="price-card"><p class="plan-label">ESENCIAL</p><h3>Presencia<br />concentrada.</h3><p class="price-description">Para lanzar una propuesta clara y hacer que se vea tan bien como se explica.</p><p class="price">Desde <b>US$390</b></p><ul><li>Landing de hasta 5 secciones</li><li>Diseño a medida</li><li>Formulario de contacto</li><li>Optimización móvil</li></ul><a href="#contacto">Quiero empezar <span>→</span></a></article>
-          <article class="price-card featured"><span class="plan-tag">EL MÁS ELEGIDO</span><p class="plan-label">IMPULSO</p><h3>Una experiencia<br />que mueve.</h3><p class="price-description">Para marcas que necesitan una web completa, memorable y preparada para crecer.</p><p class="price">Desde <b>US$790</b></p><ul><li>Web de hasta 10 páginas</li><li>Animaciones con propósito</li><li>SEO técnico esencial</li><li>Analítica y soporte inicial</li></ul><a href="#contacto">Hablemos del proyecto <span>→</span></a></article>
-          <article class="price-card"><p class="plan-label">SISTEMA</p><h3>Una plataforma<br />para escalar.</h3><p class="price-description">Para proyectos que necesitan catálogo, contenido, flujos y una arquitectura más robusta.</p><p class="price">A medida <b>✦</b></p><ul><li>E-commerce o contenido</li><li>Prototipo de flujos</li><li>Sistema de componentes</li><li>Integraciones necesarias</li></ul><a href="#contacto">Diseñar el alcance <span>→</span></a></article>
-        </div>
-        <p class="pricing-note">¿No sabes por dónde comenzar? Una conversación corta basta para encontrar el formato correcto.</p>
-      </section>
+  document.querySelectorAll('.faq-item button').forEach((button) => button.addEventListener('click', () => {
+    const item = button.closest('.faq-item');
+    const shouldOpen = !item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach((faq) => {
+      faq.classList.remove('open');
+      faq.querySelector('button').setAttribute('aria-expanded', 'false');
+    });
+    item.classList.toggle('open', shouldOpen);
+    button.setAttribute('aria-expanded', String(shouldOpen));
+  }));
 
-      <section class="voices section-shell">
-        <div class="voices-head"><p class="eyebrow">07 — Lo que cambia</p><div><span class="quote-mark">“</span><p id="quote-text">Por fin sentimos que nuestra web cuenta lo que hacemos sin tener que explicarlo tres veces.</p><div class="quote-person"><b id="quote-name">Camila Rojas</b><span id="quote-role">Fundadora, Casa Nativa</span></div></div><div class="quote-controls"><button class="quote-prev" type="button" aria-label="Testimonio anterior">←</button><span><b id="quote-index">01</b> / 03</span><button class="quote-next" type="button" aria-label="Testimonio siguiente">→</button></div></div>
-      </section>
+  const quotes = [
+    ['Por fin sentimos que nuestra web cuenta lo que hacemos sin tener que explicarlo tres veces.', 'Camila Rojas', 'Fundadora, Casa Nativa'],
+    ['El proceso nos ayudó a ordenar una idea que ya tenía valor, pero todavía no una forma clara de llegar a la gente.', 'Mateo Vélez', 'Director, Nómada Studio'],
+    ['No fue solo un cambio visual. Ahora cada persona entiende qué hacemos y cuál es el siguiente paso.', 'Laura Pineda', 'Co-fundadora, Taller Norte']
+  ];
+  let quoteIndex = 0;
+  const quoteText = document.querySelector('#quote-text');
+  const quoteName = document.querySelector('#quote-name');
+  const quoteRole = document.querySelector('#quote-role');
+  const quoteCounter = document.querySelector('#quote-index');
+  const updateQuote = (direction) => {
+    quoteIndex = (quoteIndex + direction + quotes.length) % quotes.length;
+    const [text, name, role] = quotes[quoteIndex];
+    if (motionEnabled) gsap.fromTo([quoteText, quoteName, quoteRole], { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .35, stagger: .05, ease: 'power2.out' });
+    quoteText.textContent = text; quoteName.textContent = name; quoteRole.textContent = role;
+    quoteCounter.textContent = String(quoteIndex + 1).padStart(2, '0');
+  };
+  document.querySelector('.quote-prev').addEventListener('click', () => updateQuote(-1));
+  document.querySelector('.quote-next').addEventListener('click', () => updateQuote(1));
 
-      <section id="preguntas" class="faq section-shell">
-        <div class="faq-title"><p class="eyebrow">08 — Preguntas frecuentes</p><h2>Todo empieza<br />con una buena<br /><em>conversación.</em></h2></div>
-        <div class="faq-list">
-          <article class="faq-item"><button aria-expanded="false"><span>¿Cuánto tiempo toma crear una página?</span><b>+</b></button><div><p>Una landing puede estar lista entre 2 y 3 semanas. Una web más completa normalmente necesita entre 4 y 6 semanas, según el contenido y los flujos.</p></div></article>
-          <article class="faq-item"><button aria-expanded="false"><span>¿Necesito tener todo el contenido listo?</span><b>+</b></button><div><p>No. Te guiamos con una estructura de contenido, preguntas y prioridades para que no tengas que resolverlo todo antes de empezar.</p></div></article>
-          <article class="faq-item"><button aria-expanded="false"><span>¿La página podrá crecer después?</span><b>+</b></button><div><p>Sí. Diseñamos con sistemas y componentes reutilizables, para que añadir una sección, producto o artículo no implique volver a empezar.</p></div></article>
-          <article class="faq-item"><button aria-expanded="false"><span>¿Qué pasa luego de publicar?</span><b>+</b></button><div><p>Te entregamos una guía de uso y un período de soporte inicial. Si el proyecto lo necesita, también definimos una bolsa mensual de evolución.</p></div></article>
-        </div>
-      </section>
+  const demoToast = document.createElement('div');
+  demoToast.className = 'demo-toast';
+  demoToast.setAttribute('role', 'status');
+  document.body.append(demoToast);
+  document.querySelectorAll('[data-demo-toast]').forEach((button) => button.addEventListener('click', () => {
+    demoToast.textContent = button.dataset.demoToast;
+    demoToast.classList.add('show');
+    window.setTimeout(() => demoToast.classList.remove('show'), 2800);
+  }));
 
-      <section id="contacto" class="contact section-shell">
-        <div class="contact-intro"><p class="eyebrow">09 — Próximo paso</p><h2>Tu idea merece<br /><em>un lugar para brillar.</em></h2><p>Cuéntanos qué estás construyendo. Te respondemos con claridad, no con un pitch de ventas.</p><div class="contact-channels"><a href="mailto:ingeniero.sanchez.06@gmail.com">ingeniero.sanchez.06@gmail.com <span>↗</span></a><a href="https://wa.me/573052624583?text=Hola%20Lumina%20Dev%2C%20quiero%20hablar%20sobre%20un%20proyecto" target="_blank" rel="noopener">Escríbenos por WhatsApp <span>↗</span></a></div></div>
-        <form class="contact-form" action="https://formspree.io/f/mjgnarvq" method="POST">
-          <label>Tu nombre<input required name="nombre" placeholder="¿Cómo te llamas?" autocomplete="name" /></label>
-          <label>Tu email<input required type="email" name="email" placeholder="Para responderte" autocomplete="email" /></label>
-          <label>Cuéntanos un poco<textarea required name="mensaje" rows="3" placeholder="¿Qué te gustaría crear?"></textarea></label>
-          <button class="send-button" type="submit"><span>Enviar mensaje</span><b>↗</b></button>
-          <small>Al enviar, aceptas que conversemos sobre tu proyecto.</small>
-        </form>
-      </section>
-    </main>
-
-    <footer><a class="brand" href="#inicio"><span class="brand-mark">L</span> LUMINA<span>DEV</span></a><p>© 2026 · Hecho desde la curiosidad</p><div><a href="#proyectos">Prototipos</a><a href="#contacto">Contacto</a><a href="#inicio">Arriba ↑</a></div></footer>
-
-  </body>
-</html>
+});
